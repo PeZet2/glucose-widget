@@ -24,13 +24,13 @@ class TrayController(QObject):
         self.icon.setToolTip(APP_DISPLAY_NAME)
 
         self.menu = QMenu()
-        self.lock_action = QAction("Zablokuj widget", self.menu)
-        self.open_config_action = QAction("Otwórz config.toml", self.menu)
-        self.open_secrets_action = QAction("Otwórz secrets.toml", self.menu)
-        self.open_nightscout_action = QAction("Otwórz w przeglądarce", self.menu)
-        self.reload_action = QAction("Przeładuj konfigurację", self.menu)
-        self.show_action = QAction("Pokaż widget", self.menu)
-        self.quit_action = QAction("Zakończ", self.menu)
+        self.lock_action = QAction("Lock widget", self.menu)
+        self.open_config_action = QAction("Open config.toml", self.menu)
+        self.open_secrets_action = QAction("Open secrets.toml", self.menu)
+        self.open_nightscout_action = QAction("Open in browser", self.menu)
+        self.reload_action = QAction("Reload configuration", self.menu)
+        self.show_action = QAction("Show widget", self.menu)
+        self.quit_action = QAction("Exit", self.menu)
 
         self.menu.addAction(self.lock_action)
         self.menu.addAction(self.show_action)
@@ -69,7 +69,7 @@ class TrayController(QObject):
 
     def set_locked(self, locked: bool) -> None:
         self.lock_action.setText(
-            "Odblokuj widget" if locked else "Zablokuj widget"
+            "Unlock widget" if locked else "Lock widget"
         )
 
     def set_nightscout_url_available(self, available: bool) -> None:

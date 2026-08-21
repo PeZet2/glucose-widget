@@ -10,7 +10,7 @@ Completed successfully:
 - Windows PowerShell scripts from v0.1.2 remain unchanged.
 
 New in 0.1.3:
-- Added "Otwórz w przeglądarce" directly below "Pokaż widget" in the tray menu.
+- Added "Open in browser" directly below "Show widget" in the tray menu.
 - The action is hidden when no real Nightscout base URL is configured.
 - The action visibility is refreshed after configuration reload.
 - Windows opens the configured URL through the system default browser association.

@@ -17,12 +17,12 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--config-dir",
         type=Path,
-        help="Nadpisuje katalog config/state/logs (przydatne do testów i trybu portable).",
+        help="Overrides the config/state/logs directory (useful for tests and portable mode).",
     )
     parser.add_argument(
         "--print-config-dir",
         action="store_true",
-        help="Wypisuje katalog konfiguracji i kończy działanie.",
+        help="Prints the configuration directory and exits.",
     )
     return parser.parse_args()
 
@@ -41,7 +41,7 @@ def main() -> int:
 
     configure_logging(paths.log_dir)
     logger = logging.getLogger(__name__)
-    logger.info("Uruchamianie %s", APP_DISPLAY_NAME)
+    logger.info("Starting %s", APP_DISPLAY_NAME)
 
     integration = create_desktop_integration()
     integration.prepare_process()
@@ -63,7 +63,7 @@ def main() -> int:
         QMessageBox.information(
             None,
             APP_DISPLAY_NAME,
-            "Nightscout Widget jest już uruchomiony.",
+            "Nightscout Widget is already running.",
         )
         return 0
 

@@ -64,9 +64,9 @@ class AlarmManager:
             self._settings.glucose.display_unit,
         )
         if zone == GlucoseZone.LOW:
-            title = "Niska glikemia"
+            title = "Low glucose"
         else:
-            title = "Wysoka glikemia"
+            title = "High glucose"
         message = f"{value} {self._settings.glucose.display_unit}"
 
         if self._settings.alarm.sound:

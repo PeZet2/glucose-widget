@@ -1,77 +1,77 @@
 # Nightscout Widget
 
-Mały, bezramkowy widget „always on top” dla Windows, który pobiera ostatnie odczyty z Nightscout i pokazuje:
+A small, frameless, always-on-top Windows widget that fetches recent readings from Nightscout and displays:
 
-- bieżącą glikemię,
-- deltę względem odczytu sprzed `N` pomiarów, np. `+14 (-3)`,
-- strzałkę trendu,
-- godzinę odczytu,
-- kolor stanu: zielony w zakresie, bursztynowy powyżej progu, czerwony poniżej progu.
+- current glucose,
+- the delta relative to the reading `N` measurements ago, for example `+14 (-3)`,
+- a trend arrow,
+- the reading time,
+- a status color: green in range, amber above the threshold, and red below the threshold.
 
-Domyślny rozmiar okna to **172 × 100 px**, czyli mniej więcej wielkość czerwonej ramki z przekazanego zrzutu ekranu.
+The default window size is **172 × 100 px**, approximately matching the red frame in the supplied screenshot.
 
-> **Ważne:** to pomocniczy, prywatny widget, a nie wyrób medyczny. Nie używaj go jako jedynego źródła decyzji terapeutycznych ani jedynego alarmu. Awaria sieci, Nightscout, systemu powiadomień lub samej aplikacji może opóźnić albo uniemożliwić pokazanie danych.
+> **Important:** This is a private helper widget, not a medical device. Do not use it as the sole source for treatment decisions or your only alarm. Network, Nightscout, notification-system, or application failures may delay or prevent data from being displayed.
 
-## Zgodność z Windows PowerShell 5.1
+## Windows PowerShell 5.1 compatibility
 
-Skrypty `scripts/*.ps1` są zapisane wyłącznie znakami ASCII i z końcami linii CRLF. Dzięki temu działają także w standardowym Windows PowerShell 5.1, który potrafi błędnie odczytać pliki UTF-8 bez znacznika BOM.
+The `scripts/*.ps1` scripts use ASCII characters only and CRLF line endings, so they also work in standard Windows PowerShell 5.1, which can otherwise misread UTF-8 files without a BOM.
 
-## Najszybsze uruchomienie na Windows
+## Quick start on Windows
 
-Wymagany jest jeden z wariantów:
+You need either:
 
-- `uv`, albo
-- Python 3.11+ dostępny jako `py` lub `python`.
+- `uv`, or
+- Python 3.11+ available as `py` or `python`.
 
-1. Rozpakuj projekt.
-2. Uruchom `START_WINDOWS.bat`.
-3. Przy pierwszym uruchomieniu aplikacja utworzy pliki:
+1. Extract the project.
+2. Run `START_WINDOWS.bat`.
+3. On first launch, the application creates:
 
    ```text
    %APPDATA%\NightscoutWidget\config.toml
    %APPDATA%\NightscoutWidget\secrets.toml
    ```
 
-4. Kliknij prawym przyciskiem ikonę kropli w trayu i wybierz:
-   - `Otwórz config.toml`,
-   - `Otwórz secrets.toml`.
-5. Uzupełnij adres Nightscout i dane dostępowe.
-6. Zapisz pliki i wybierz `Przeładuj konfigurację` albo uruchom aplikację ponownie.
+4. Right-click the drop icon in the tray and choose:
+   - `Open config.toml` for Nightscout url and other configuration
+   - `Open secrets.toml` for secret keys and tokens
+5. Fill the necessary data.
+6. Save the files and choose `Reload configuration`, or restart the application.
 
-Do diagnostyki uruchom `RUN_DEBUG_WINDOWS.bat`. Log znajduje się w katalogu zwracanym przez `platformdirs`, standardowo pod lokalnym profilem użytkownika, w folderze `NightscoutWidget`.
+For diagnostics, run `RUN_DEBUG_WINDOWS.bat`. The log is stored in the directory returned by `platformdirs`, normally under the user's local profile in `NightscoutWidget`.
 
-## Minimalna konfiguracja
+## Minimal configuration
 
 `config.toml`:
 
 ```toml
 [nightscout]
-base_url = "https://twoja-instancja-nightscout.example.com"
+base_url = "https://your-nightscout-instance.example.com"
 auth_mode = "auto"
 verify_tls = true
 ```
 
-`secrets.toml` — zalecany osobny token tylko do odczytu:
+`secrets.toml` — a separate read-only token is recommended:
 
 ```toml
 [nightscout]
-access_token = "nazwa-tokena-xxxxxxxxxxxxxxxx"
+access_token = "token-name-xxxxxxxxxxxxxxxx"
 api_secret = ""
 api_secret_is_sha1 = false
 ```
 
-Alternatywnie możesz użyć surowego `API_SECRET`:
+Alternatively, use a raw `API_SECRET`:
 
 ```toml
 [nightscout]
 access_token = ""
-api_secret = "twoj-surowy-api-secret"
+api_secret = "your-raw-api-secret"
 api_secret_is_sha1 = false
 ```
 
-Aplikacja sama obliczy małymi literami SHA-1 wymagany przez API v1. Gdy podajesz już gotowy, 40-znakowy hash, ustaw `api_secret_is_sha1 = true`.
+The application calculates the lowercase SHA-1 hash required by API v1. If you provide an existing 40-character hash, set `api_secret_is_sha1 = true`.
 
-## Najważniejsze ustawienia
+## Main settings
 
 ```toml
 [network]
@@ -104,111 +104,111 @@ repeat_minutes = 10
 
 ### Retry
 
-`max_retries = 3` oznacza trzy dodatkowe próby po pierwszym nieudanym wywołaniu. Każda następuje domyślnie po 15 sekundach. Po wyczerpaniu retry aplikacja czeka pełne `poll_interval_seconds`.
+`max_retries = 3` means three additional attempts after the first failed request. By default, each follows after 15 seconds. Once retries are exhausted, the application waits for the full `poll_interval_seconds` interval.
 
-Błędy konfiguracji i uwierzytelnienia nie są bez sensu ponawiane co 15 sekund — po nich aplikacja wraca od razu do zwykłego interwału. Po poprawieniu plików wybierz `Przeładuj konfigurację`.
+Configuration and authentication errors are not repeatedly retried every 15 seconds; after them, the application immediately returns to its regular interval. After fixing the files, choose `Reload configuration`.
 
 ### Delta
 
-`delta_lookback` jest w kodzie ograniczane do zakresu **1–10**. Aplikacja pobiera z Nightscout kilka najnowszych rekordów przy każdym odpytywaniu, więc delta jest dostępna od razu po uruchomieniu, bez czekania na zebranie lokalnej historii.
+`delta_lookback` is limited in code to **1–10**. The application fetches several recent records from Nightscout on each poll, so the delta is available immediately after launch without waiting to build local history.
 
-Dla `delta_lookback = 3`:
+For `delta_lookback = 3`:
 
 ```text
 +14 (-3)
 ```
 
-oznacza, że obecna wartość jest o 14 jednostek wyższa niż wartość trzy pomiary temu.
+This means the current value is 14 units higher than the value three measurements ago.
 
 ### Alarm
 
-Alarm może używać:
+The alarm can use:
 
-- systemowego dźwięku Windows,
-- powiadomienia z traya.
+- the Windows system sound,
+- a tray notification.
 
-Nie alarmuje ponownie dla dokładnie tego samego rekordu Nightscout. Dla kolejnych nowych rekordów poza zakresem może powtarzać alarm zgodnie z `repeat_minutes`. Wartość `0` oznacza alarm tylko przy wejściu w LOW/HIGH albo przy zmianie LOW ↔ HIGH.
+The same Nightscout record is not alarmed twice. For subsequent new out-of-range records, the alarm may repeat according to `repeat_minutes`. A value of `0` means alert only when entering LOW/HIGH or switching between LOW and HIGH.
 
-Odczyt starszy niż `stale_after_minutes` jest oznaczany `!` i nie uruchamia alarmu.
+A reading older than `stale_after_minutes` is marked with `!` and does not trigger an alarm.
 
 ### Opacity
 
-`opacity` jest ograniczane do zakresu `0.20–1.00`. Przezroczyste jest tło karty, natomiast tekst pozostaje w pełni czytelny.
+`opacity` is limited to `0.20–1.00`. The card background is transparent while the text remains fully readable.
 
-## Menu traya
+## Tray menu
 
-Kliknięcie prawym przyciskiem ikony otwiera menu:
+Right-clicking the icon opens the menu:
 
-- `Zablokuj widget` / `Odblokuj widget` — blokuje lub pozwala przesuwać okno,
-- `Pokaż widget` — przywraca i podnosi okno,
-- `Otwórz w przeglądarce` — widoczne tylko przy skonfigurowanym `nightscout.base_url`; otwiera Nightscout w domyślnej przeglądarce,
-- `Otwórz config.toml`,
-- `Otwórz secrets.toml`,
-- `Przeładuj konfigurację`,
-- `Zakończ`.
+- `Lock widget` / `Unlock widget` — locks or allows moving the window,
+- `Show widget` — restores and raises the window,
+- `Open in browser` — visible only when `nightscout.base_url` is configured; opens Nightscout in the default browser,
+- `Open config.toml`,
+- `Open secrets.toml`,
+- `Reload configuration`,
+- `Exit`.
 
-Pozycja okna i stan blokady są zapisywane w `%APPDATA%\NightscoutWidget\state.json`. Gdy monitor zostanie odłączony, aplikacja wykryje pozycję poza ekranem i przeniesie widget na prawy dolny obszar aktywnego ekranu.
+The window position and lock state are saved in `%APPDATA%\NightscoutWidget\state.json`. If a monitor is disconnected, the application detects an off-screen position and moves the widget to the lower-right area of the active screen.
 
-## Budowa EXE
+## Building the EXE
 
-Uruchom:
+Run:
 
 ```text
 BUILD_EXE_WINDOWS.bat
 ```
 
-Wyniki:
+Output:
 
 ```text
 dist\NightscoutWidget\NightscoutWidget.exe
 dist\NightscoutWidget-Windows.zip
 ```
 
-Build jest typu `onedir`, a nie `onefile`. Dzięki temu start Qt jest szybszy i mniej podatny na problemy antywirusa związane z rozpakowywaniem aplikacji do katalogu tymczasowego.
+The build uses `onedir`, not `onefile`. This makes Qt start faster and reduces antivirus issues caused by extracting the application into a temporary directory.
 
-## API Nightscout
+## Nightscout API
 
-Klient używa kompatybilnego endpointu API v1:
+The client uses the compatible API v1 endpoint:
 
 ```text
 /api/v1/entries/sgv.json?count=...
 ```
 
-Obsługiwane tryby uwierzytelnienia:
+Supported authentication modes:
 
-- token dostępu wysyłany w nagłówku `api-secret`,
-- surowy `API_SECRET`, lokalnie hashowany SHA-1,
-- gotowy hash SHA-1,
-- brak uwierzytelnienia dla publicznej instancji.
+- an access token sent in the `api-secret` header,
+- a raw `API_SECRET` hashed locally with SHA-1,
+- an existing SHA-1 hash,
+- no authentication for a public instance.
 
-Token tylko do odczytu jest lepszy niż udostępnianie pełnego `API_SECRET`. Token utworzysz w Nightscout w `Admin Tools`, nadając mu rolę `readable`.
+A read-only token is preferable to sharing the full `API_SECRET`. Create a token in Nightscout under `Admin Tools` and give it the `readable` role.
 
-Dokumentacja Nightscout:
+Nightscout's Documentation:
 
 - https://nightscout.github.io/nightscout/admin_tools/
 - https://nightscout.github.io/nightscout/security/
 
-## Architektura
+## Architecture
 
 ```text
 src/nightscout_widget/
-├── core/                 # API Nightscout i obliczenia, bez zależności od Windows
-├── ui/                   # PySide6: widget, tray, polling w tle
+├── core/                 # Nightscout API and calculations, independent of Windows
+├── ui/                   # PySide6: widget, tray, background polling
 ├── os_integration/
 │   ├── base.py
-│   ├── generic.py        # minimalny fallback deweloperski
-│   └── windows.py        # os.startfile i AppUserModelID
+│   ├── generic.py        # minimal developers fallback
+│   └── windows.py        # os.startfile and AppUserModelID
 ├── config.py
 ├── state.py
 ├── alarm.py
 └── app.py
 ```
 
-Folder nazywa się `os_integration`, a nie `platform`, aby nie zasłaniać standardowego modułu Pythona `platform`.
+The folder is named `os_integration`, rather than `platform`, to avoid shadowing Python's standard `platform` module.
 
-Kod wspólny jest przygotowany pod późniejsze dodanie dedykowanego `linux.py`. Obecna paczka i skrypty build są przeznaczone dla Windows; zachowanie „always on top”, traya i przezroczystości na Linuxie należy osobno sprawdzić na X11 i Waylandzie.
+The shared code is prepared for a future dedicated `linux.py`. The current package and build scripts target Windows; always-on-top behavior, the tray, and transparency on Linux should be checked separately on X11 and Wayland.
 
-## Testy i lint
+## Tests and lint
 
 ```bash
 uv sync --extra dev
@@ -216,27 +216,15 @@ uv run pytest
 uv run ruff check .
 ```
 
-Możesz wskazać alternatywny katalog konfiguracji:
+You can specify an alternative configuration directory:
 
 ```bash
 python -m nightscout_widget --config-dir ./portable-data
 ```
 
-Albo tylko sprawdzić bieżącą lokalizację konfiguracji:
+Or only print the current configuration location:
 
 ```bash
 python -m nightscout_widget --print-config-dir
 ```
 
-## Zmiany w 0.1.3
-
-- Dodano `Otwórz w przeglądarce` bezpośrednio pod `Pokaż widget` w menu traya.
-- Opcja jest widoczna tylko wtedy, gdy `nightscout.base_url` zawiera rzeczywisty adres Nightscout.
-- Na Windows adres jest przekazywany do domyślnej przeglądarki przez mechanizm powłoki systemowej; uruchomiona przeglądarka standardowo otwiera go w nowej zakładce.
-- Widoczność opcji aktualizuje się także po `Przeładuj konfigurację`.
-
-## Zmiany w 0.1.2
-
-- Naprawiono zamykanie aplikacji z menu traya: widget i ikona traya są teraz ukrywane/zamykane przed zakończeniem pętli Qt.
-- Dodano ochronę przed wielokrotnym wywołaniem procedury zamykania.
-- Przy zatrzymaniu odpytywania usuwane są oczekujące zadania z puli Qt.

@@ -54,7 +54,7 @@ class NightscoutWidgetController(QObject):
             self._settings = load_settings(paths.config_file, paths.secrets_file)
             initial_config_error: str | None = None
         except ConfigurationError as exc:
-            logger.error("Błąd konfiguracji: %s", exc)
+            logger.error("Configuration error: %s", exc)
             self._settings = default_settings()
             initial_config_error = str(exc)
 
@@ -79,8 +79,8 @@ class NightscoutWidgetController(QObject):
 
         if initial_config_error:
             self.widget.show_configuration_error(initial_config_error)
-            self.tray.set_tooltip(f"{APP_DISPLAY_NAME} — błąd konfiguracji")
-            self.tray.show_warning("Błąd konfiguracji", initial_config_error)
+            self.tray.set_tooltip(f"{APP_DISPLAY_NAME} — configuration error")
+            self.tray.show_warning("Configuration error", initial_config_error)
         else:
             self.poller.start()
 
@@ -111,10 +111,10 @@ class NightscoutWidgetController(QObject):
         try:
             settings = load_settings(self._paths.config_file, self._paths.secrets_file)
         except ConfigurationError as exc:
-            logger.error("Nie udało się przeładować konfiguracji: %s", exc)
+            logger.error("Failed to reload configuration: %s", exc)
             if not self._has_snapshot:
                 self.widget.show_configuration_error(str(exc))
-            self.tray.show_warning("Błąd konfiguracji", str(exc))
+            self.tray.show_warning("Configuration error", str(exc))
             return
 
         self._settings = settings
@@ -130,7 +130,7 @@ class NightscoutWidgetController(QObject):
         self.poller.start()
         self.tray.show_information(
             "Nightscout Widget",
-            "Konfiguracja została przeładowana.",
+            "Configuration reloaded.",
             timeout_ms=4_000,
         )
 
@@ -145,8 +145,8 @@ class NightscoutWidgetController(QObject):
         try:
             self._integration.open_url(url)
         except OSError as exc:
-            logger.exception("Nie można otworzyć Nightscout w przeglądarce: %s", url)
-            self.tray.show_warning("Nie można otworzyć Nightscout", str(exc))
+            logger.exception("Unable to open Nightscout in the browser: %s", url)
+            self.tray.show_warning("Unable to open Nightscout", str(exc))
 
     def quit(self) -> None:
         if self._quitting:
@@ -169,7 +169,7 @@ class NightscoutWidgetController(QObject):
 
     def _on_snapshot(self, snapshot: object) -> None:
         if not isinstance(snapshot, GlucoseSnapshot):
-            logger.error("Worker zwrócił nieznany typ wyniku: %r", type(snapshot))
+            logger.error("Worker returned an unknown result type: %r", type(snapshot))
             return
 
         self._has_snapshot = True
@@ -188,7 +188,7 @@ class NightscoutWidgetController(QObject):
 
         value = format_value(snapshot.latest.value_mg_dl, glucose.display_unit)
         arrow = direction_arrow(snapshot.latest.direction)
-        stale_suffix = " | odczyt nieaktualny" if is_stale else ""
+        stale_suffix = " | reading is stale" if is_stale else ""
         self.tray.set_tooltip(
             f"{value} {glucose.display_unit} {arrow} | "
             f"{snapshot.latest.timestamp:%H:%M}{stale_suffix}"
@@ -206,17 +206,17 @@ class NightscoutWidgetController(QObject):
         if status.will_retry:
             retry_note = (
                 f"retry {status.retry_number}/{status.max_retries} "
-                f"za {status.next_delay_seconds}s"
+                f"in {status.next_delay_seconds}s"
             )
         else:
-            retry_note = f"następna próba za {status.next_delay_seconds}s"
+            retry_note = f"next attempt in {status.next_delay_seconds}s"
             now = time.monotonic()
             should_notify = (
                 status.message != self._last_failure_message
                 or now - self._last_failure_notice_at >= 30 * 60
             )
             if should_notify:
-                self.tray.show_warning("Nightscout — błąd", status.message)
+                self.tray.show_warning("Nightscout — error", status.message)
                 self._last_failure_message = status.message
                 self._last_failure_notice_at = now
 
@@ -230,8 +230,8 @@ class NightscoutWidgetController(QObject):
         try:
             self._integration.open_file(path)
         except OSError as exc:
-            logger.exception("Nie można otworzyć pliku %s", path)
-            self.tray.show_warning("Nie można otworzyć pliku", str(exc))
+            logger.exception("Unable to open file %s", path)
+            self.tray.show_warning("Unable to open file", str(exc))
 
     def _on_position_changed(self, x: int, y: int) -> None:
         self._state.x = x

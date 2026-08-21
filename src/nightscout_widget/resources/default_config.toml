@@ -1,65 +1,65 @@
-# Nightscout Widget - konfiguracja użytkownika
-# Plik jest tworzony przy pierwszym uruchomieniu w:
+# Nightscout Widget - user configuration
+# The file is created on first launch at:
 #   %APPDATA%\NightscoutWidget\config.toml
-# Po zmianie wybierz w trayu "Przeładuj konfigurację" albo uruchom aplikację ponownie.
+# After changing it, choose "Reload configuration" in the tray or restart the application.
 
 [nightscout]
-# Główny adres Twojej instancji Nightscout, bez końcowego /api/v1.
+# Main URL of your Nightscout instance, without the trailing /api/v1.
 base_url = "https://YOUR-NIGHTSCOUT.example.com"
 
-# auto       - najpierw access_token, potem api_secret, a gdy oba są puste: bez logowania
-# token      - wymaga access_token w secrets.toml
-# api_secret - wymaga api_secret w secrets.toml
-# none       - bez uwierzytelniania, tylko dla publicznej instancji
-# Zalecany wariant: read-only access token i tryb auto albo token.
+# auto       - access_token first, then api_secret; if both are empty: no login
+# token      - requires access_token in secrets.toml
+# api_secret - requires api_secret in secrets.toml
+# none       - no authentication, for public instances only
+# Recommended option: read-only access token with auto or token mode.
 auth_mode = "auto"
 
-# Nie wyłączaj dla zwykłej publicznej domeny HTTPS.
+# Do not disable this for a regular public HTTPS domain.
 verify_tls = true
 
 [network]
-# Domyślnie 2 minuty.
+# 2 minutes by default.
 poll_interval_seconds = 120
 request_timeout_seconds = 10
 
-# Po błędzie wykonane zostaną maksymalnie 3 DODATKOWE próby,
-# każda po 15 sekundach. Po ich wyczerpaniu aplikacja wraca
-# do zwykłego poll_interval_seconds.
+# After an error, up to 3 ADDITIONAL attempts will be made,
+# each after 15 seconds. Once they are exhausted, the application returns
+# to the regular poll_interval_seconds interval.
 retry_delay_seconds = 15
 max_retries = 3
 
 [glucose]
-# Progi są podawane w jednostce ustawionej w display_unit.
-display_unit = "mg/dL"  # dozwolone: "mg/dL" albo "mmol/L"
+# Thresholds use the unit configured in display_unit.
+display_unit = "mg/dL"  # allowed: "mg/dL" or "mmol/L"
 low = 70
 high = 180
 
-# Delta względem N-tego wcześniejszego pomiaru.
-# Kod zawsze ogranicza tę wartość do zakresu 1-10.
+# Delta relative to the Nth previous reading.
+# The code always limits this value to the 1-10 range.
 delta_lookback = 1
 
-# Odczyt starszy niż ten limit jest oznaczany jako nieaktualny.
+# A reading older than this limit is marked as stale.
 stale_after_minutes = 15
 
 [widget]
-# Domyślny rozmiar odpowiada mniej więcej czerwonej ramce z przykładowego zrzutu.
+# The default size roughly matches the red frame in the example screenshot.
 width = 172
 height = 100
 
-# Zakres 0.20-1.00. Przezroczyste jest tło; tekst pozostaje czytelny.
+# Range 0.20-1.00. The background is transparent; text remains readable.
 opacity = 0.94
 
-# Stan blokady jest później zapamiętywany w state.json.
+# The lock state is saved in state.json.
 start_locked = false
 always_on_top = true
 show_reading_time = true
 
 [alarm]
-# Alarm to dźwięk systemowy i/lub powiadomienie z traya.
+# The alarm is a system sound and/or a tray notification.
 enabled = false
 sound = true
 tray_notification = true
 
-# 0 = alarmuj tylko przy wejściu w stan LOW/HIGH albo zmianie LOW<->HIGH.
-# Wartość > 0 pozwala ponowić alarm po tylu minutach, gdy stan nadal trwa.
+# 0 = alert only when entering LOW/HIGH or switching LOW<->HIGH.
+# A value > 0 repeats the alert after that many minutes while the state persists.
 repeat_minutes = 10
