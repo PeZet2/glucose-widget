@@ -10,5 +10,5 @@ if ([string]::IsNullOrWhiteSpace($Python)) {
 }
 $Python = $Python.Trim()
 
-& $Python -m nightscout_widget
+& $Python -m glucose_widget
 exit $LASTEXITCODE

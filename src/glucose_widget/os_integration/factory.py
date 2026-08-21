@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import sys
 
-from nightscout_widget.os_integration.base import DesktopIntegration
-from nightscout_widget.os_integration.generic import GenericDesktopIntegration
-from nightscout_widget.os_integration.windows import WindowsDesktopIntegration
+from glucose_widget.os_integration.base import DesktopIntegration
+from glucose_widget.os_integration.generic import GenericDesktopIntegration
+from glucose_widget.os_integration.windows import WindowsDesktopIntegration
 
 
 def create_desktop_integration() -> DesktopIntegration:

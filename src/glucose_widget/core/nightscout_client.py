@@ -8,9 +8,9 @@ from urllib.parse import urlsplit, urlunsplit
 
 import httpx
 
-from nightscout_widget.config import ApplicationSettings
-from nightscout_widget.core.glucose import build_snapshot
-from nightscout_widget.models import GlucoseReading, GlucoseSnapshot
+from glucose_widget.config import ApplicationSettings
+from glucose_widget.core.glucose import build_snapshot
+from glucose_widget.models import GlucoseReading, GlucoseSnapshot
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ class NightscoutClient:
                 timeout=self._settings.network.request_timeout_seconds,
                 follow_redirects=True,
                 verify=self._settings.nightscout.verify_tls,
-                headers={"User-Agent": "NightscoutWidget/0.1"},
+                headers={"User-Agent": "GlucoseWidget/0.1"},
             ) as client:
                 response = client.get(
                     self._endpoint,

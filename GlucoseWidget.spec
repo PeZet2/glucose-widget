@@ -3,17 +3,17 @@
 
 datas = [
     (
-        "src/nightscout_widget/resources/default_config.toml",
-        "nightscout_widget/resources",
+        "src/glucose_widget/resources/default_config.toml",
+        "glucose_widget/resources",
     ),
     (
-        "src/nightscout_widget/resources/default_secrets.toml",
-        "nightscout_widget/resources",
+        "src/glucose_widget/resources/default_secrets.toml",
+        "glucose_widget/resources",
     ),
 ]
 
 a = Analysis(
-    ["src/nightscout_widget/__main__.py"],
+    ["src/glucose_widget/__main__.py"],
     pathex=["src"],
     binaries=[],
     datas=datas,
@@ -32,7 +32,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name="NightscoutWidget",
+    name="GlucoseWidget",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -43,7 +43,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon="assets/nightscout_widget.ico",
+    icon="assets/glucose_widget.ico",
 )
 
 coll = COLLECT(
@@ -53,5 +53,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name="NightscoutWidget",
+    name="GlucoseWidget",
 )

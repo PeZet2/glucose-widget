@@ -7,7 +7,7 @@ from pathlib import Path
 
 def configure_logging(log_dir: Path) -> Path:
     log_dir.mkdir(parents=True, exist_ok=True)
-    log_file = log_dir / "nightscout-widget.log"
+    log_file = log_dir / "glucose-widget.log"
 
     root = logging.getLogger()
     root.setLevel(logging.INFO)

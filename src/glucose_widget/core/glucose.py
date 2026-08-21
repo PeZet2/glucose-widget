@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from nightscout_widget.models import GlucoseReading, GlucoseSnapshot, GlucoseZone
+from glucose_widget.models import GlucoseReading, GlucoseSnapshot, GlucoseZone
 
 _DIRECTION_ARROWS = {
     "DoubleUp": "⇈",

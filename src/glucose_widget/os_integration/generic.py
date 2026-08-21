@@ -5,7 +5,7 @@ from pathlib import Path
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QDesktopServices
 
-from nightscout_widget.os_integration.base import DesktopIntegration
+from glucose_widget.os_integration.base import DesktopIntegration
 
 
 class GenericDesktopIntegration(DesktopIntegration):

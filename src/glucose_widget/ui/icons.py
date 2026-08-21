@@ -3,7 +3,7 @@ from __future__ import annotations
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QColor, QIcon, QPainter, QPainterPath, QPen, QPixmap
 
-from nightscout_widget.models import GlucoseZone
+from glucose_widget.models import GlucoseZone
 
 ZONE_COLORS = {
     GlucoseZone.LOW: "#D32F2F",

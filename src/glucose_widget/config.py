@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping
 
-from nightscout_widget.constants import DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH
+from glucose_widget.constants import DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH
 
 logger = logging.getLogger(__name__)
 
