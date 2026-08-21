@@ -7,6 +7,8 @@ build/
 dist/
 *.spec.bak
 
+*.egg-info
+
 # Gdy używasz trybu portable, te pliki zawierają lokalny stan i sekrety.
 portable-data/
 config.toml
