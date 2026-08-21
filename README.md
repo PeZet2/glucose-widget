@@ -1,4 +1,4 @@
-# Nightscout Widget
+# Glucose Widget
 
 A small, frameless, always-on-top Windows widget that fetches recent readings from Nightscout and displays:
 
@@ -28,8 +28,8 @@ You need either:
 3. On first launch, the application creates:
 
    ```text
-   %APPDATA%\NightscoutWidget\config.toml
-   %APPDATA%\NightscoutWidget\secrets.toml
+   %APPDATA%\GlucoseWidget\config.toml
+   %APPDATA%\GlucoseWidget\secrets.toml
    ```
 
 4. Right-click the drop icon in the tray and choose:
@@ -38,7 +38,7 @@ You need either:
 5. Fill the necessary data.
 6. Save the files and choose `Reload configuration`, or restart the application.
 
-For diagnostics, run `RUN_DEBUG_WINDOWS.bat`. The log is stored in the directory returned by `platformdirs`, normally under the user's local profile in `NightscoutWidget`.
+For diagnostics, run `RUN_DEBUG_WINDOWS.bat`. The log is stored in the directory returned by `platformdirs`, normally under the user's local profile in `GlucoseWidget`.
 
 ## Minimal configuration
 
@@ -147,7 +147,7 @@ Right-clicking the icon opens the menu:
 - `Reload configuration`,
 - `Exit`.
 
-The window position and lock state are saved in `%APPDATA%\NightscoutWidget\state.json`. If a monitor is disconnected, the application detects an off-screen position and moves the widget to the lower-right area of the active screen.
+The window position and lock state are saved in `%APPDATA%\GlucoseWidget\state.json`. If a monitor is disconnected, the application detects an off-screen position and moves the widget to the lower-right area of the active screen.
 
 ## Building the EXE
 
@@ -160,8 +160,8 @@ BUILD_EXE_WINDOWS.bat
 Output:
 
 ```text
-dist\NightscoutWidget\NightscoutWidget.exe
-dist\NightscoutWidget-Windows.zip
+dist\GlucoseWidget\GlucoseWidget.exe
+dist\GlucoseWidget-Windows.zip
 ```
 
 The build uses `onedir`, not `onefile`. This makes Qt start faster and reduces antivirus issues caused by extracting the application into a temporary directory.
@@ -191,7 +191,7 @@ Nightscout's Documentation:
 ## Architecture
 
 ```text
-src/nightscout_widget/
+src/glucose_widget/
 ├── core/                 # Nightscout API and calculations, independent of Windows
 ├── ui/                   # PySide6: widget, tray, background polling
 ├── os_integration/
@@ -219,12 +219,12 @@ uv run ruff check .
 You can specify an alternative configuration directory:
 
 ```bash
-python -m nightscout_widget --config-dir ./portable-data
+python -m glucose_widget --config-dir ./portable-data
 ```
 
 Or only print the current configuration location:
 
 ```bash
-python -m nightscout_widget --print-config-dir
+python -m glucose_widget --print-config-dir
 ```
 

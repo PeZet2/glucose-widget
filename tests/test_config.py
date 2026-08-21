@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from nightscout_widget.config import ConfigurationError, load_settings
+from glucose_widget.config import ConfigurationError, load_settings
 
 
 BASE_CONFIG = """
@@ -96,9 +96,9 @@ def test_token_mode_requires_token(tmp_path: Path) -> None:
 
 
 def test_bundled_default_files_are_valid(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    from nightscout_widget.paths import AppPaths
+    from glucose_widget.paths import AppPaths
 
-    monkeypatch.setenv("NIGHTSCOUT_WIDGET_HOME", str(tmp_path))
+    monkeypatch.setenv("GLUCOSE_WIDGET_HOME", str(tmp_path))
     paths = AppPaths.discover()
     paths.ensure()
     settings = load_settings(paths.config_file, paths.secrets_file)

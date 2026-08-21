@@ -6,13 +6,13 @@ from datetime import UTC, datetime
 import httpx
 import pytest
 
-from nightscout_widget.config import (
+from glucose_widget.config import (
     ApplicationSettings,
     NightscoutSettings,
     SecretsSettings,
 )
-from nightscout_widget.core import nightscout_client as client_module
-from nightscout_widget.core.nightscout_client import (
+from glucose_widget.core import nightscout_client as client_module
+from glucose_widget.core.nightscout_client import (
     NightscoutClient,
     NightscoutConfigurationError,
     _build_auth_headers,

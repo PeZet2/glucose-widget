@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from nightscout_widget.state import StateStore, WindowState
+from glucose_widget.state import StateStore, WindowState
 
 
 def test_state_round_trip(tmp_path: Path) -> None:

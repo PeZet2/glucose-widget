@@ -4,10 +4,10 @@ from datetime import datetime, timedelta
 
 from PySide6.QtWidgets import QApplication
 
-from nightscout_widget.config import ApplicationSettings
-from nightscout_widget.core.glucose import format_value
-from nightscout_widget.models import GlucoseSnapshot, GlucoseZone
-from nightscout_widget.ui.tray import TrayController
+from glucose_widget.config import ApplicationSettings
+from glucose_widget.core.glucose import format_value
+from glucose_widget.models import GlucoseSnapshot, GlucoseZone
+from glucose_widget.ui.tray import TrayController
 
 
 class AlarmManager:

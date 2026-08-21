@@ -5,8 +5,8 @@ from dataclasses import dataclass
 
 from PySide6.QtCore import QObject, QRunnable, Signal, Slot
 
-from nightscout_widget.config import ApplicationSettings
-from nightscout_widget.core.nightscout_client import (
+from glucose_widget.config import ApplicationSettings
+from glucose_widget.core.nightscout_client import (
     NightscoutAuthenticationError,
     NightscoutClient,
     NightscoutConfigurationError,

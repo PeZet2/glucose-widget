@@ -15,5 +15,5 @@ if (-not (Test-Path $PythonW)) {
     $PythonW = $Python
 }
 
-Write-Host "Starting Nightscout Widget..."
-Start-Process -FilePath $PythonW -ArgumentList @("-m", "nightscout_widget") -WorkingDirectory $ProjectRoot
+Write-Host "Starting Glucose Widget..."
+Start-Process -FilePath $PythonW -ArgumentList @("-m", "glucose_widget") -WorkingDirectory $ProjectRoot

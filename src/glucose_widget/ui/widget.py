@@ -6,15 +6,15 @@ from PySide6.QtCore import QEvent, QPoint, Qt, Signal
 from PySide6.QtGui import QCloseEvent, QMouseEvent
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
-from nightscout_widget.config import ApplicationSettings, WidgetSettings
-from nightscout_widget.core.glucose import (
+from glucose_widget.config import ApplicationSettings, WidgetSettings
+from glucose_widget.core.glucose import (
     direction_arrow,
     format_delta,
     format_value,
     zone_for_value,
 )
-from nightscout_widget.models import GlucoseSnapshot, GlucoseZone
-from nightscout_widget.ui.icons import NEUTRAL_COLOR, ZONE_COLORS
+from glucose_widget.models import GlucoseSnapshot, GlucoseZone
+from glucose_widget.ui.icons import NEUTRAL_COLOR, ZONE_COLORS
 
 
 class GlucoseWidget(QWidget):

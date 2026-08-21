@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 
-from nightscout_widget.core.glucose import (
+from glucose_widget.core.glucose import (
     build_snapshot,
     direction_arrow,
     format_delta,
     format_value,
     zone_for_value,
 )
-from nightscout_widget.models import GlucoseReading, GlucoseZone
+from glucose_widget.models import GlucoseReading, GlucoseZone
 
 
 def _reading(value: float, minutes_ago: int, direction: str = "Flat") -> GlucoseReading:

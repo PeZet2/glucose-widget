@@ -4,9 +4,9 @@ from PySide6.QtCore import QObject, Signal
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 
-from nightscout_widget.constants import APP_DISPLAY_NAME
-from nightscout_widget.models import GlucoseZone
-from nightscout_widget.ui.icons import tray_icon
+from glucose_widget.constants import APP_DISPLAY_NAME
+from glucose_widget.models import GlucoseZone
+from glucose_widget.ui.icons import tray_icon
 
 
 class TrayController(QObject):

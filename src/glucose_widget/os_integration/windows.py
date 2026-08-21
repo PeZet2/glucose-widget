@@ -5,8 +5,8 @@ import os
 import subprocess
 from pathlib import Path
 
-from nightscout_widget.constants import APP_USER_MODEL_ID
-from nightscout_widget.os_integration.base import DesktopIntegration
+from glucose_widget.constants import APP_USER_MODEL_ID
+from glucose_widget.os_integration.base import DesktopIntegration
 
 
 class WindowsDesktopIntegration(DesktopIntegration):

@@ -8,30 +8,30 @@ from PySide6.QtCore import QObject, QRect
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtWidgets import QApplication
 
-from nightscout_widget.alarm import AlarmManager
-from nightscout_widget.config import (
+from glucose_widget.alarm import AlarmManager
+from glucose_widget.config import (
     ConfigurationError,
     default_settings,
     load_settings,
 )
-from nightscout_widget.constants import APP_DISPLAY_NAME
-from nightscout_widget.core.glucose import (
+from glucose_widget.constants import APP_DISPLAY_NAME
+from glucose_widget.core.glucose import (
     direction_arrow,
     format_value,
     zone_for_value,
 )
-from nightscout_widget.models import GlucoseSnapshot, GlucoseZone
-from nightscout_widget.os_integration.base import DesktopIntegration
-from nightscout_widget.paths import AppPaths
-from nightscout_widget.state import StateStore
-from nightscout_widget.ui.polling import PollController, PollFailureStatus
-from nightscout_widget.ui.tray import TrayController
-from nightscout_widget.ui.widget import GlucoseWidget
+from glucose_widget.models import GlucoseSnapshot, GlucoseZone
+from glucose_widget.os_integration.base import DesktopIntegration
+from glucose_widget.paths import AppPaths
+from glucose_widget.state import StateStore
+from glucose_widget.ui.polling import PollController, PollFailureStatus
+from glucose_widget.ui.tray import TrayController
+from glucose_widget.ui.widget import GlucoseWidget
 
 logger = logging.getLogger(__name__)
 
 
-class NightscoutWidgetController(QObject):
+class GlucoseWidgetController(QObject):
     def __init__(
         self,
         application: QApplication,
@@ -129,7 +129,7 @@ class NightscoutWidgetController(QObject):
         self.poller.apply_settings(settings)
         self.poller.start()
         self.tray.show_information(
-            "Nightscout Widget",
+            "Glucose Widget",
             "Configuration reloaded.",
             timeout_ms=4_000,
         )

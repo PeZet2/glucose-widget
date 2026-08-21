@@ -1,6 +1,6 @@
-# Nightscout Widget - user configuration
+# Glucose Widget - user configuration
 # The file is created on first launch at:
-#   %APPDATA%\NightscoutWidget\config.toml
+#   %APPDATA%\GlucoseWidget\config.toml
 # After changing it, choose "Reload configuration" in the tray or restart the application.
 
 [nightscout]

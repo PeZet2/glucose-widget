@@ -5,8 +5,8 @@ from dataclasses import dataclass
 
 from PySide6.QtCore import QObject, QThreadPool, QTimer, Signal
 
-from nightscout_widget.config import ApplicationSettings
-from nightscout_widget.ui.worker import FetchFailure, FetchWorker
+from glucose_widget.config import ApplicationSettings
+from glucose_widget.ui.worker import FetchFailure, FetchWorker
 
 logger = logging.getLogger(__name__)
 

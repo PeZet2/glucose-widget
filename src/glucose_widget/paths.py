@@ -7,7 +7,7 @@ from pathlib import Path
 
 from platformdirs import user_config_path, user_log_path
 
-from nightscout_widget.constants import APP_NAME
+from glucose_widget.constants import APP_NAME
 
 
 @dataclass(frozen=True, slots=True)
@@ -20,7 +20,7 @@ class AppPaths:
 
     @classmethod
     def discover(cls) -> "AppPaths":
-        override = os.environ.get("NIGHTSCOUT_WIDGET_HOME", "").strip()
+        override = os.environ.get("GLUCOSE_WIDGET_HOME", "").strip()
         if override:
             config_dir = Path(override).expanduser().resolve()
             log_dir = config_dir / "logs"
@@ -53,7 +53,7 @@ class AppPaths:
         if target.exists():
             return
         content = (
-            resources.files("nightscout_widget.resources")
+            resources.files("glucose_widget.resources")
             .joinpath(resource_name)
             .read_text(encoding="utf-8")
         )
