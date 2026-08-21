@@ -226,3 +226,9 @@ Albo tylko sprawdzić bieżącą lokalizację konfiguracji:
 ```bash
 python -m nightscout_widget --print-config-dir
 ```
+
+## Zmiany w 0.1.2
+
+- Naprawiono zamykanie aplikacji z menu traya: widget i ikona traya są teraz ukrywane/zamykane przed zakończeniem pętli Qt.
+- Dodano ochronę przed wielokrotnym wywołaniem procedury zamykania.
+- Przy zatrzymaniu odpytywania usuwane są oczekujące zadania z puli Qt.

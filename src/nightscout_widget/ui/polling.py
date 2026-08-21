@@ -45,6 +45,9 @@ class PollController(QObject):
         self._stopped = True
         self._timer.stop()
         self._active_job_id = None
+        # Drop work that has not started yet. A currently running HTTP request
+        # will finish on its own, but its result is invalidated above.
+        self._thread_pool.clear()
 
     def apply_settings(self, settings: ApplicationSettings) -> None:
         self._settings = settings

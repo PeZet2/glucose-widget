@@ -48,6 +48,7 @@ class NightscoutWidgetController(QObject):
         self._has_snapshot = False
         self._last_failure_message: str | None = None
         self._last_failure_notice_at = 0.0
+        self._quitting = False
 
         try:
             self._settings = load_settings(paths.config_file, paths.secrets_file)
@@ -135,12 +136,22 @@ class NightscoutWidgetController(QObject):
         self.widget.raise_()
 
     def quit(self) -> None:
+        if self._quitting:
+            return
+        self._quitting = True
+
         self.poller.stop()
         self._state.x = self.widget.x()
         self._state.y = self.widget.y()
         self._state.locked = self.widget.locked
         self._save_state()
+
+        # The widget used to ignore every closeEvent. QApplication.quit() stops
+        # the event loop, but that did not guarantee that the still-live widget
+        # disappeared immediately on Windows. Explicitly shut down both UI
+        # surfaces first, then terminate the event loop.
         self.tray.hide()
+        self.widget.shutdown()
         self._application.quit()
 
     def _on_snapshot(self, snapshot: object) -> None:

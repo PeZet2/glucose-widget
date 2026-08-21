@@ -1,4 +1,4 @@
-Nightscout Widget 0.1.1 - verification report
+Nightscout Widget 0.1.2 - verification report
 Date: 2026-08-21
 
 Completed successfully:

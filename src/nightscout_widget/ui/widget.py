@@ -28,6 +28,7 @@ class GlucoseWidget(QWidget):
         self._last_snapshot: GlucoseSnapshot | None = None
         self._last_zone: GlucoseZone | None = None
         self._connection_error: str | None = None
+        self._shutdown_requested = False
 
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
         self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
@@ -300,6 +301,19 @@ class GlucoseWidget(QWidget):
             return True
         return False
 
+    def shutdown(self) -> None:
+        """Close the widget as part of an explicit application shutdown."""
+        self._shutdown_requested = True
+
+        # Hide first so the UI disappears immediately even if a background
+        # Nightscout request is still unwinding for a moment.
+        self.hide()
+        self.close()
+
     def closeEvent(self, event: QCloseEvent) -> None:
-        # The app is intentionally controlled through the tray menu.
-        event.ignore()
+        # Ignore accidental/user close requests because the app is controlled
+        # through the tray. Explicit shutdown is the only close we accept.
+        if self._shutdown_requested:
+            event.accept()
+        else:
+            event.ignore()
