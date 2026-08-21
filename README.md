@@ -145,6 +145,7 @@ Right-clicking the icon opens the menu:
 - `Open config.toml`,
 - `Open secrets.toml`,
 - `Reload configuration`,
+- `Show logs` — opens the saved log file in the default text editor,
 - `Exit`.
 
 The window position and lock state are saved in `%APPDATA%\GlucoseWidget\state.json`. If a monitor is disconnected, the application detects an off-screen position and moves the widget to the lower-right area of the active screen.
