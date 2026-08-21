@@ -141,6 +141,7 @@ Kliknięcie prawym przyciskiem ikony otwiera menu:
 
 - `Zablokuj widget` / `Odblokuj widget` — blokuje lub pozwala przesuwać okno,
 - `Pokaż widget` — przywraca i podnosi okno,
+- `Otwórz w przeglądarce` — widoczne tylko przy skonfigurowanym `nightscout.base_url`; otwiera Nightscout w domyślnej przeglądarce,
 - `Otwórz config.toml`,
 - `Otwórz secrets.toml`,
 - `Przeładuj konfigurację`,
@@ -226,6 +227,13 @@ Albo tylko sprawdzić bieżącą lokalizację konfiguracji:
 ```bash
 python -m nightscout_widget --print-config-dir
 ```
+
+## Zmiany w 0.1.3
+
+- Dodano `Otwórz w przeglądarce` bezpośrednio pod `Pokaż widget` w menu traya.
+- Opcja jest widoczna tylko wtedy, gdy `nightscout.base_url` zawiera rzeczywisty adres Nightscout.
+- Na Windows adres jest przekazywany do domyślnej przeglądarki przez mechanizm powłoki systemowej; uruchomiona przeglądarka standardowo otwiera go w nowej zakładce.
+- Widoczność opcji aktualizuje się także po `Przeładuj konfigurację`.
 
 ## Zmiany w 0.1.2
 

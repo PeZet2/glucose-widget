@@ -1,15 +1,20 @@
-Nightscout Widget 0.1.2 - verification report
+Nightscout Widget 0.1.3 - verification report
 Date: 2026-08-21
 
 Completed successfully:
 - 14 unit tests: PASSED
 - Python compileall for src/ and tests/: PASSED
-- Bundled config.toml and secrets.toml templates parse correctly: PASSED
+- Bundled config.toml and secrets.toml templates parse correctly: covered by tests
 - Nightscout endpoint/auth/JSON parsing tested with httpx MockTransport: PASSED
-- Windows PowerShell scripts contain ASCII only and CRLF line endings: PASSED
-- Windows PowerShell 5.1 source-encoding compatibility fix applied: PASSED
+- Tray/browser integration source compiles successfully: PASSED
+- Windows PowerShell scripts from v0.1.2 remain unchanged.
+
+New in 0.1.3:
+- Added "Otwórz w przeglądarce" directly below "Pokaż widget" in the tray menu.
+- The action is hidden when no real Nightscout base URL is configured.
+- The action visibility is refreshed after configuration reload.
+- Windows opens the configured URL through the system default browser association.
 
 Environment limitation:
 - The Windows GUI and PyInstaller-produced .exe were not executed in this Linux container.
-  The package includes Windows launch/build scripts; final smoke-testing of tray behavior,
-  always-on-top behavior and the executable should be done on the target Windows machine.
+  Final smoke-testing of tray behavior and browser opening should be done on the target Windows machine.

@@ -69,6 +69,7 @@ class NightscoutWidgetController(QObject):
 
         self.tray = TrayController(self)
         self.tray.set_locked(locked)
+        self.tray.set_nightscout_url_available(self._has_configured_nightscout_url())
         self.alarm = AlarmManager(self._settings, self.tray)
         self.poller = PollController(self._settings, self)
 
@@ -92,6 +93,7 @@ class NightscoutWidgetController(QObject):
         self.tray.open_secrets_requested.connect(
             lambda: self._open_file(self._paths.secrets_file)
         )
+        self.tray.open_nightscout_requested.connect(self.open_nightscout)
         self.tray.reload_requested.connect(self.reload_configuration)
         self.tray.show_widget_requested.connect(self.show_widget)
         self.tray.quit_requested.connect(self.quit)
@@ -120,6 +122,7 @@ class NightscoutWidgetController(QObject):
         self.widget.set_locked(self.widget.locked)
         self._ensure_widget_visible_on_a_screen()
         self.alarm.apply_settings(settings)
+        self.tray.set_nightscout_url_available(self._has_configured_nightscout_url())
 
         # apply_settings starts a fresh fetch when the poller is running. The poller
         # is started explicitly here too, which covers recovery from an initial TOML error.
@@ -134,6 +137,16 @@ class NightscoutWidgetController(QObject):
     def show_widget(self) -> None:
         self.widget.show()
         self.widget.raise_()
+
+    def open_nightscout(self) -> None:
+        url = self._settings.nightscout.base_url.strip()
+        if not self._has_configured_nightscout_url():
+            return
+        try:
+            self._integration.open_url(url)
+        except OSError as exc:
+            logger.exception("Nie można otworzyć Nightscout w przeglądarce: %s", url)
+            self.tray.show_warning("Nie można otworzyć Nightscout", str(exc))
 
     def quit(self) -> None:
         if self._quitting:
@@ -208,6 +221,10 @@ class NightscoutWidgetController(QObject):
                 self._last_failure_notice_at = now
 
         self.tray.set_tooltip(f"{APP_DISPLAY_NAME} — {retry_note}")
+
+    def _has_configured_nightscout_url(self) -> bool:
+        url = self._settings.nightscout.base_url.strip()
+        return bool(url) and "YOUR-NIGHTSCOUT" not in url.upper()
 
     def _open_file(self, path: Path) -> None:
         try:

@@ -13,6 +13,7 @@ class TrayController(QObject):
     toggle_lock_requested = Signal()
     open_config_requested = Signal()
     open_secrets_requested = Signal()
+    open_nightscout_requested = Signal()
     reload_requested = Signal()
     show_widget_requested = Signal()
     quit_requested = Signal()
@@ -26,12 +27,14 @@ class TrayController(QObject):
         self.lock_action = QAction("Zablokuj widget", self.menu)
         self.open_config_action = QAction("Otwórz config.toml", self.menu)
         self.open_secrets_action = QAction("Otwórz secrets.toml", self.menu)
+        self.open_nightscout_action = QAction("Otwórz w przeglądarce", self.menu)
         self.reload_action = QAction("Przeładuj konfigurację", self.menu)
         self.show_action = QAction("Pokaż widget", self.menu)
         self.quit_action = QAction("Zakończ", self.menu)
 
         self.menu.addAction(self.lock_action)
         self.menu.addAction(self.show_action)
+        self.menu.addAction(self.open_nightscout_action)
         self.menu.addSeparator()
         self.menu.addAction(self.open_config_action)
         self.menu.addAction(self.open_secrets_action)
@@ -47,10 +50,16 @@ class TrayController(QObject):
         self.open_secrets_action.triggered.connect(
             lambda _checked=False: self.open_secrets_requested.emit()
         )
+        self.open_nightscout_action.triggered.connect(
+            lambda _checked=False: self.open_nightscout_requested.emit()
+        )
         self.reload_action.triggered.connect(lambda _checked=False: self.reload_requested.emit())
         self.show_action.triggered.connect(lambda _checked=False: self.show_widget_requested.emit())
         self.quit_action.triggered.connect(lambda _checked=False: self.quit_requested.emit())
         self.icon.activated.connect(self._on_activated)
+
+        # Hidden until the controller confirms that a real Nightscout URL is configured.
+        self.open_nightscout_action.setVisible(False)
 
     def show(self) -> None:
         self.icon.show()
@@ -62,6 +71,9 @@ class TrayController(QObject):
         self.lock_action.setText(
             "Odblokuj widget" if locked else "Zablokuj widget"
         )
+
+    def set_nightscout_url_available(self, available: bool) -> None:
+        self.open_nightscout_action.setVisible(available)
 
     def set_zone(self, zone: GlucoseZone | None) -> None:
         self.icon.setIcon(tray_icon(zone))

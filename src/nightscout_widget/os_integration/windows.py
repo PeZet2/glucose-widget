@@ -26,3 +26,9 @@ class WindowsDesktopIntegration(DesktopIntegration):
         except OSError:
             # .toml is not associated with an editor on every Windows installation.
             subprocess.Popen(["notepad.exe", str(path)], close_fds=True)
+
+    def open_url(self, url: str) -> None:
+        # ShellExecute (used by os.startfile on Windows) delegates the URL to the
+        # system default browser. If that browser is already running, modern
+        # browsers normally open the address in a new tab of the existing process.
+        os.startfile(url)  # type: ignore[attr-defined]
