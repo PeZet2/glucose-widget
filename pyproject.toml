@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nightscout-widget"
-version = "0.1.0"
+version = "0.1.1"
 description = "Small always-on-top Nightscout glucose widget for Windows"
 readme = "README.md"
 requires-python = ">=3.11"

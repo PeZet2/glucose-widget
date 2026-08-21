@@ -12,6 +12,10 @@ Domyślny rozmiar okna to **172 × 100 px**, czyli mniej więcej wielkość czer
 
 > **Ważne:** to pomocniczy, prywatny widget, a nie wyrób medyczny. Nie używaj go jako jedynego źródła decyzji terapeutycznych ani jedynego alarmu. Awaria sieci, Nightscout, systemu powiadomień lub samej aplikacji może opóźnić albo uniemożliwić pokazanie danych.
 
+## Zgodność z Windows PowerShell 5.1
+
+Skrypty `scripts/*.ps1` są zapisane wyłącznie znakami ASCII i z końcami linii CRLF. Dzięki temu działają także w standardowym Windows PowerShell 5.1, który potrafi błędnie odczytać pliki UTF-8 bez znacznika BOM.
+
 ## Najszybsze uruchomienie na Windows
 
 Wymagany jest jeden z wariantów:

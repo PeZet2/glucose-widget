@@ -1,12 +1,13 @@
-Nightscout Widget 0.1.0 - verification report
+Nightscout Widget 0.1.1 - verification report
 Date: 2026-08-21
 
 Completed successfully:
 - 14 unit tests: PASSED
 - Python compileall for src/ and tests/: PASSED
-- Python wheel build with package resources: PASSED
 - Bundled config.toml and secrets.toml templates parse correctly: PASSED
 - Nightscout endpoint/auth/JSON parsing tested with httpx MockTransport: PASSED
+- Windows PowerShell scripts contain ASCII only and CRLF line endings: PASSED
+- Windows PowerShell 5.1 source-encoding compatibility fix applied: PASSED
 
 Environment limitation:
 - The Windows GUI and PyInstaller-produced .exe were not executed in this Linux container.
