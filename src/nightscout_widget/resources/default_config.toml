@@ -1,0 +1,65 @@
+# Nightscout Widget - konfiguracja użytkownika
+# Plik jest tworzony przy pierwszym uruchomieniu w:
+#   %APPDATA%\NightscoutWidget\config.toml
+# Po zmianie wybierz w trayu "Przeładuj konfigurację" albo uruchom aplikację ponownie.
+
+[nightscout]
+# Główny adres Twojej instancji Nightscout, bez końcowego /api/v1.
+base_url = "https://YOUR-NIGHTSCOUT.example.com"
+
+# auto       - najpierw access_token, potem api_secret, a gdy oba są puste: bez logowania
+# token      - wymaga access_token w secrets.toml
+# api_secret - wymaga api_secret w secrets.toml
+# none       - bez uwierzytelniania, tylko dla publicznej instancji
+# Zalecany wariant: read-only access token i tryb auto albo token.
+auth_mode = "auto"
+
+# Nie wyłączaj dla zwykłej publicznej domeny HTTPS.
+verify_tls = true
+
+[network]
+# Domyślnie 2 minuty.
+poll_interval_seconds = 120
+request_timeout_seconds = 10
+
+# Po błędzie wykonane zostaną maksymalnie 3 DODATKOWE próby,
+# każda po 15 sekundach. Po ich wyczerpaniu aplikacja wraca
+# do zwykłego poll_interval_seconds.
+retry_delay_seconds = 15
+max_retries = 3
+
+[glucose]
+# Progi są podawane w jednostce ustawionej w display_unit.
+display_unit = "mg/dL"  # dozwolone: "mg/dL" albo "mmol/L"
+low = 70
+high = 180
+
+# Delta względem N-tego wcześniejszego pomiaru.
+# Kod zawsze ogranicza tę wartość do zakresu 1-10.
+delta_lookback = 1
+
+# Odczyt starszy niż ten limit jest oznaczany jako nieaktualny.
+stale_after_minutes = 15
+
+[widget]
+# Domyślny rozmiar odpowiada mniej więcej czerwonej ramce z przykładowego zrzutu.
+width = 172
+height = 100
+
+# Zakres 0.20-1.00. Przezroczyste jest tło; tekst pozostaje czytelny.
+opacity = 0.94
+
+# Stan blokady jest później zapamiętywany w state.json.
+start_locked = false
+always_on_top = true
+show_reading_time = true
+
+[alarm]
+# Alarm to dźwięk systemowy i/lub powiadomienie z traya.
+enabled = false
+sound = true
+tray_notification = true
+
+# 0 = alarmuj tylko przy wejściu w stan LOW/HIGH albo zmianie LOW<->HIGH.
+# Wartość > 0 pozwala ponowić alarm po tylu minutach, gdy stan nadal trwa.
+repeat_minutes = 10

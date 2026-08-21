@@ -1,0 +1,14 @@
+Nightscout Widget 0.1.0 - verification report
+Date: 2026-08-21
+
+Completed successfully:
+- 14 unit tests: PASSED
+- Python compileall for src/ and tests/: PASSED
+- Python wheel build with package resources: PASSED
+- Bundled config.toml and secrets.toml templates parse correctly: PASSED
+- Nightscout endpoint/auth/JSON parsing tested with httpx MockTransport: PASSED
+
+Environment limitation:
+- The Windows GUI and PyInstaller-produced .exe were not executed in this Linux container.
+  The package includes Windows launch/build scripts; final smoke-testing of tray behavior,
+  always-on-top behavior and the executable should be done on the target Windows machine.

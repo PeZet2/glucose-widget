@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+*.spec.bak
+
+# Gdy używasz trybu portable, te pliki zawierają lokalny stan i sekrety.
+portable-data/
+config.toml
+secrets.toml
+state.json
+*.log
