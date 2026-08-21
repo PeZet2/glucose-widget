@@ -8,6 +8,7 @@ dist/
 *.spec.bak
 
 *.egg-info
+src/glucose_widget/_version.py
 
 # Gdy używasz trybu portable, te pliki zawierają lokalny stan i sekrety.
 portable-data/
