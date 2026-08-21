@@ -5,7 +5,7 @@
 
 [nightscout]
 # Main URL of your Nightscout instance, without the trailing /api/v1.
-base_url = "https://YOUR-NIGHTSCOUT.example.com"
+base_url = ""
 
 # auto       - access_token first, then api_secret; if both are empty: no login
 # token      - requires access_token in secrets.toml
