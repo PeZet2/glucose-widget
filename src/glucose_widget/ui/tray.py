@@ -15,6 +15,7 @@ class TrayController(QObject):
     open_secrets_requested = Signal()
     open_nightscout_requested = Signal()
     reload_requested = Signal()
+    show_logs_requested = Signal()
     show_widget_requested = Signal()
     quit_requested = Signal()
 
@@ -29,6 +30,7 @@ class TrayController(QObject):
         self.open_secrets_action = QAction("Open secrets.toml", self.menu)
         self.open_nightscout_action = QAction("Open in browser", self.menu)
         self.reload_action = QAction("Reload configuration", self.menu)
+        self.show_logs_action = QAction("Show logs", self.menu)
         self.show_action = QAction("Show widget", self.menu)
         self.quit_action = QAction("Exit", self.menu)
 
@@ -39,6 +41,7 @@ class TrayController(QObject):
         self.menu.addAction(self.open_config_action)
         self.menu.addAction(self.open_secrets_action)
         self.menu.addAction(self.reload_action)
+        self.menu.addAction(self.show_logs_action)
         self.menu.addSeparator()
         self.menu.addAction(self.quit_action)
         self.icon.setContextMenu(self.menu)
@@ -54,6 +57,9 @@ class TrayController(QObject):
             lambda _checked=False: self.open_nightscout_requested.emit()
         )
         self.reload_action.triggered.connect(lambda _checked=False: self.reload_requested.emit())
+        self.show_logs_action.triggered.connect(
+            lambda _checked=False: self.show_logs_requested.emit()
+        )
         self.show_action.triggered.connect(lambda _checked=False: self.show_widget_requested.emit())
         self.quit_action.triggered.connect(lambda _checked=False: self.quit_requested.emit())
         self.icon.activated.connect(self._on_activated)

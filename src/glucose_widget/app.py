@@ -95,6 +95,9 @@ class GlucoseWidgetController(QObject):
         )
         self.tray.open_nightscout_requested.connect(self.open_nightscout)
         self.tray.reload_requested.connect(self.reload_configuration)
+        self.tray.show_logs_requested.connect(
+            lambda: self._open_file(self._paths.log_dir / "glucose-widget.log")
+        )
         self.tray.show_widget_requested.connect(self.show_widget)
         self.tray.quit_requested.connect(self.quit)
         self.poller.snapshot_received.connect(self._on_snapshot)
