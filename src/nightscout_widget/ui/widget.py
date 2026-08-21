@@ -48,7 +48,7 @@ class GlucoseWidget(QWidget):
         self._delta_label.setObjectName("delta")
         self._delta_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
-        self._time_label = QLabel("czekam…")
+        self._time_label = QLabel("waiting…")
         self._time_label.setObjectName("time")
         self._time_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
@@ -122,10 +122,10 @@ class GlucoseWidget(QWidget):
         self._connection_error = None
         self._value_label.setText("---")
         self._trend_label.setText("·")
-        self._delta_label.setText("czekam na dane")
+        self._delta_label.setText("waiting for data")
         self._time_label.setText("")
         self._time_label.setStyleSheet("")
-        self._set_tooltip("Oczekiwanie na pierwszy odczyt z Nightscout.")
+        self._set_tooltip("Waiting for the first Nightscout reading.")
         self._refresh_style(None)
 
     def show_configuration_error(self, message: str) -> None:
@@ -134,7 +134,7 @@ class GlucoseWidget(QWidget):
         self._connection_error = message
         self._value_label.setText("CFG")
         self._trend_label.setText("!")
-        self._delta_label.setText("otwórz config")
+        self._delta_label.setText("open config")
         self._time_label.setText("")
         self._time_label.setStyleSheet("")
         self._set_tooltip(message)
@@ -174,11 +174,11 @@ class GlucoseWidget(QWidget):
             meta = unit
         self._time_label.setText(f"! {meta}" if is_stale else meta)
 
-        stale_note = " Odczyt jest nieaktualny." if is_stale else ""
+        stale_note = " The reading is stale." if is_stale else ""
         self._set_tooltip(
             f"{format_value(snapshot.latest.value_mg_dl, glucose.display_unit)} "
-            f"{glucose.display_unit}, kierunek: {snapshot.latest.direction}, "
-            f"czas: {snapshot.latest.timestamp:%Y-%m-%d %H:%M:%S}."
+            f"{glucose.display_unit}, direction: {snapshot.latest.direction}, "
+            f"time: {snapshot.latest.timestamp:%Y-%m-%d %H:%M:%S}."
             f"{stale_note}"
         )
         self._refresh_style(zone)
@@ -189,7 +189,7 @@ class GlucoseWidget(QWidget):
         if self._last_snapshot is None:
             self._value_label.setText("ERR")
             self._trend_label.setText("!")
-            self._delta_label.setText("brak połączenia")
+            self._delta_label.setText("no connection")
             self._last_zone = None
             self._refresh_style(None)
         self._time_label.setText("offline")

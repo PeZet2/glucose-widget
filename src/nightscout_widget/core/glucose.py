@@ -21,7 +21,7 @@ _DIRECTION_ARROWS = {
 def build_snapshot(readings: Sequence[GlucoseReading], lookback: int) -> GlucoseSnapshot:
     lookback = max(1, min(10, int(lookback)))
     if not readings:
-        raise ValueError("Nightscout nie zwrócił żadnych prawidłowych odczytów glikemii.")
+        raise ValueError("Nightscout returned no valid glucose readings.")
 
     ordered = sorted(readings, key=lambda item: item.timestamp, reverse=True)
     latest = ordered[0]

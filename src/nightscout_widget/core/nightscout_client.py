@@ -58,31 +58,31 @@ class NightscoutClient:
                     headers=self._headers,
                 )
         except httpx.TimeoutException as exc:
-            raise NightscoutError("Przekroczono czas oczekiwania na Nightscout.") from exc
+            raise NightscoutError("Nightscout request timed out.") from exc
         except httpx.RequestError as exc:
-            raise NightscoutError(f"Błąd połączenia z Nightscout: {exc}") from exc
+            raise NightscoutError(f"Nightscout connection error: {exc}") from exc
 
         if response.status_code in {401, 403}:
             raise NightscoutAuthenticationError(
-                "Nightscout odrzucił dane dostępowe (HTTP "
-                f"{response.status_code}). Sprawdź auth_mode oraz secrets.toml."
+                "Nightscout rejected the credentials (HTTP "
+                f"{response.status_code}). Check auth_mode and secrets.toml."
             )
 
         try:
             response.raise_for_status()
         except httpx.HTTPStatusError as exc:
             raise NightscoutError(
-                f"Nightscout zwrócił HTTP {response.status_code}."
+                f"Nightscout returned HTTP {response.status_code}."
             ) from exc
 
         try:
             payload = response.json()
         except ValueError as exc:
-            raise NightscoutResponseError("Nightscout nie zwrócił prawidłowego JSON-a.") from exc
+            raise NightscoutResponseError("Nightscout did not return valid JSON.") from exc
 
         if not isinstance(payload, list):
             raise NightscoutResponseError(
-                "Nieoczekiwany format odpowiedzi Nightscout: oczekiwano listy odczytów."
+                "Unexpected Nightscout response format: expected a list of readings."
             )
 
         parsed: list[GlucoseReading] = []
@@ -92,7 +92,7 @@ class NightscoutClient:
             try:
                 parsed.append(_parse_entry(entry))
             except (TypeError, ValueError, KeyError) as exc:
-                logger.warning("Pominięto nieprawidłowy rekord Nightscout: %s", exc)
+                logger.warning("Skipped invalid Nightscout record: %s", exc)
 
         # De-duplicate by timestamp, keeping the first (newest response order is typical,
         # but we sort explicitly to avoid relying on server ordering).
@@ -106,7 +106,7 @@ class NightscoutClient:
             unique.append(reading)
 
         if not unique:
-            raise NightscoutResponseError("Nightscout nie zwrócił prawidłowych odczytów SGV.")
+            raise NightscoutResponseError("Nightscout returned no valid SGV readings.")
         return unique
 
 
@@ -114,18 +114,18 @@ def _build_entries_endpoint(base_url: str) -> str:
     base_url = base_url.strip()
     if not base_url or "YOUR-NIGHTSCOUT" in base_url.upper():
         raise NightscoutConfigurationError(
-            "Uzupełnij nightscout.base_url w config.toml."
+            "Set nightscout.base_url in config.toml."
         )
 
     parts = urlsplit(base_url)
     if parts.scheme not in {"http", "https"} or not parts.netloc:
         raise NightscoutConfigurationError(
-            "nightscout.base_url musi być pełnym adresem http:// albo https://."
+            "nightscout.base_url must be a complete http:// or https:// URL."
         )
     if parts.query or parts.fragment:
         raise NightscoutConfigurationError(
-            "nightscout.base_url nie powinien zawierać parametrów ani fragmentu; "
-            "token wpisz w secrets.toml."
+            "nightscout.base_url must not contain a query or fragment; "
+            "put the token in secrets.toml."
         )
 
     path = parts.path.rstrip("/")
@@ -161,19 +161,19 @@ def _build_auth_headers(settings: ApplicationSettings) -> dict[str, str]:
     if mode == "auto":
         return {}
     if mode == "token":
-        raise NightscoutConfigurationError("Brak access_token w secrets.toml.")
+        raise NightscoutConfigurationError("access_token is missing from secrets.toml.")
     if mode == "api_secret":
-        raise NightscoutConfigurationError("Brak api_secret w secrets.toml.")
-    raise NightscoutConfigurationError(f"Nieobsługiwany auth_mode: {mode}")
+        raise NightscoutConfigurationError("api_secret is missing from secrets.toml.")
+    raise NightscoutConfigurationError(f"Unsupported auth_mode: {mode}")
 
 
 def _parse_entry(entry: dict[str, Any]) -> GlucoseReading:
     raw_value = entry.get("sgv")
     if raw_value is None:
-        raise KeyError("brak pola sgv")
+        raise KeyError("missing sgv field")
     value = float(raw_value)
     if not 1 <= value <= 1_000:
-        raise ValueError(f"wartość sgv poza sensownym zakresem: {value}")
+        raise ValueError(f"sgv value outside a sensible range: {value}")
 
     timestamp = _parse_timestamp(entry)
     direction = str(entry.get("direction") or "NONE")
@@ -196,4 +196,4 @@ def _parse_timestamp(entry: dict[str, Any]) -> datetime:
             parsed = parsed.replace(tzinfo=UTC)
         return parsed.astimezone()
 
-    raise KeyError("brak pola date/mills/dateString")
+    raise KeyError("missing date/mills/dateString field")

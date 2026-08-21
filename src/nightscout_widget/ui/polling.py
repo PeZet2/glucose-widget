@@ -105,7 +105,7 @@ class PollController(QObject):
             next_delay_seconds=delay,
             will_retry=can_retry,
         )
-        logger.warning("%s Następna próba za %ss.", failure.message, delay)
+        logger.warning("%s Next attempt in %ss.", failure.message, delay)
         self.failure_reported.emit(status)
         self._schedule(delay)
 

@@ -41,7 +41,7 @@ class FetchWorker(QRunnable):
             retryable = not isinstance(
                 exc, (NightscoutConfigurationError, NightscoutAuthenticationError)
             )
-            logger.exception("Pobranie danych z Nightscout nie powiodło się.")
+            logger.exception("Failed to fetch data from Nightscout.")
             self.signals.failed.emit(
                 self.job_id,
                 FetchFailure(message=str(exc) or exc.__class__.__name__, retryable=retryable),

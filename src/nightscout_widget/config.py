@@ -97,7 +97,7 @@ def load_settings(config_path: Path, secrets_path: Path) -> ApplicationSettings:
     auth_mode = _string(ns, "auth_mode", "auto").lower()
     if auth_mode not in _ALLOWED_AUTH_MODES:
         raise ConfigurationError(
-            f"nightscout.auth_mode musi być jednym z: {', '.join(sorted(_ALLOWED_AUTH_MODES))}."
+            f"nightscout.auth_mode must be one of: {', '.join(sorted(_ALLOWED_AUTH_MODES))}."
         )
 
     display_unit = _string(glucose, "display_unit", "mg/dL")
@@ -106,7 +106,7 @@ def load_settings(config_path: Path, secrets_path: Path) -> ApplicationSettings:
     low = _number(glucose, "low", 70.0)
     high = _number(glucose, "high", 180.0)
     if low >= high:
-        raise ConfigurationError("glucose.low musi być mniejsze niż glucose.high.")
+        raise ConfigurationError("glucose.low must be lower than glucose.high.")
 
     delta_lookback_raw = _integer(glucose, "delta_lookback", 1)
     delta_lookback = _clamp_int(
@@ -124,7 +124,7 @@ def load_settings(config_path: Path, secrets_path: Path) -> ApplicationSettings:
     api_secret_is_sha1 = _boolean(secret_ns, "api_secret_is_sha1", False)
     if api_secret_is_sha1 and api_secret and not _SHA1_RE.fullmatch(api_secret):
         raise ConfigurationError(
-            "nightscout.api_secret_is_sha1=true, ale api_secret nie jest 40-znakowym SHA-1."
+            "nightscout.api_secret_is_sha1=true, but api_secret is not a 40-character SHA-1 hash."
         )
 
     settings = ApplicationSettings(
@@ -183,60 +183,60 @@ def _validate_auth(settings: ApplicationSettings) -> None:
     mode = settings.nightscout.auth_mode
     if mode == "token" and not settings.secrets.access_token:
         raise ConfigurationError(
-            "nightscout.auth_mode='token', ale secrets.toml nie zawiera access_token."
+            "nightscout.auth_mode='token', but secrets.toml does not contain access_token."
         )
     if mode == "api_secret" and not settings.secrets.api_secret:
         raise ConfigurationError(
-            "nightscout.auth_mode='api_secret', ale secrets.toml nie zawiera api_secret."
+            "nightscout.auth_mode='api_secret', but secrets.toml does not contain api_secret."
         )
 
 
 def _load_toml(path: Path, *, required: bool) -> dict[str, Any]:
     if not path.exists():
         if required:
-            raise ConfigurationError(f"Brak pliku konfiguracyjnego: {path}")
+            raise ConfigurationError(f"Configuration file not found: {path}")
         return {}
     try:
         with path.open("rb") as file:
             return tomllib.load(file)
     except tomllib.TOMLDecodeError as exc:
-        raise ConfigurationError(f"Niepoprawny TOML w {path.name}: {exc}") from exc
+        raise ConfigurationError(f"Invalid TOML in {path.name}: {exc}") from exc
     except OSError as exc:
-        raise ConfigurationError(f"Nie można odczytać {path}: {exc}") from exc
+        raise ConfigurationError(f"Unable to read {path}: {exc}") from exc
 
 
 def _table(data: Mapping[str, Any], key: str) -> Mapping[str, Any]:
     value = data.get(key, {})
     if not isinstance(value, Mapping):
-        raise ConfigurationError(f"Sekcja [{key}] musi być tabelą TOML.")
+        raise ConfigurationError(f"Section [{key}] must be a TOML table.")
     return value
 
 
 def _string(data: Mapping[str, Any], key: str, default: str) -> str:
     value = data.get(key, default)
     if not isinstance(value, str):
-        raise ConfigurationError(f"{key} musi być tekstem.")
+        raise ConfigurationError(f"{key} must be a string.")
     return value
 
 
 def _boolean(data: Mapping[str, Any], key: str, default: bool) -> bool:
     value = data.get(key, default)
     if not isinstance(value, bool):
-        raise ConfigurationError(f"{key} musi mieć wartość true albo false.")
+        raise ConfigurationError(f"{key} must be true or false.")
     return value
 
 
 def _number(data: Mapping[str, Any], key: str, default: float) -> float:
     value = data.get(key, default)
     if isinstance(value, bool) or not isinstance(value, (int, float)):
-        raise ConfigurationError(f"{key} musi być liczbą.")
+        raise ConfigurationError(f"{key} must be a number.")
     return float(value)
 
 
 def _integer(data: Mapping[str, Any], key: str, default: int) -> int:
     value = data.get(key, default)
     if isinstance(value, bool) or not isinstance(value, int):
-        raise ConfigurationError(f"{key} musi być liczbą całkowitą.")
+        raise ConfigurationError(f"{key} must be an integer.")
     return value
 
 
@@ -300,5 +300,5 @@ def _normalize_unit(value: str) -> str:
     }
     normalized = aliases.get(compact)
     if normalized not in _ALLOWED_UNITS:
-        raise ConfigurationError("glucose.display_unit musi być 'mg/dL' albo 'mmol/L'.")
+        raise ConfigurationError("glucose.display_unit must be 'mg/dL' or 'mmol/L'.")
     return normalized

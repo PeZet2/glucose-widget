@@ -11,8 +11,8 @@ from nightscout_widget.os_integration.base import DesktopIntegration
 class GenericDesktopIntegration(DesktopIntegration):
     def open_file(self, path: Path) -> None:
         if not QDesktopServices.openUrl(QUrl.fromLocalFile(str(path))):
-            raise OSError(f"System nie potrafi otworzyć pliku: {path}")
+            raise OSError(f"The system cannot open the file: {path}")
 
     def open_url(self, url: str) -> None:
         if not QDesktopServices.openUrl(QUrl(url)):
-            raise OSError(f"System nie potrafi otworzyć adresu: {url}")
+            raise OSError(f"The system cannot open the URL: {url}")

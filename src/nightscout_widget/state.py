@@ -30,7 +30,7 @@ class StateStore:
                 locked=_optional_bool(raw.get("locked")),
             )
         except (OSError, ValueError, TypeError) as exc:
-            logger.warning("Nie można odczytać stanu okna: %s", exc)
+            logger.warning("Unable to read window state: %s", exc)
             return WindowState()
 
     def save(self, state: WindowState) -> None:
@@ -43,7 +43,7 @@ class StateStore:
             )
             temporary.replace(self._path)
         except OSError as exc:
-            logger.warning("Nie można zapisać stanu okna: %s", exc)
+            logger.warning("Unable to save window state: %s", exc)
 
 
 def _optional_int(value: object) -> int | None:
