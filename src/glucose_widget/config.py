@@ -20,6 +20,10 @@ class ConfigurationError(ValueError):
     """Raised when a user configuration file cannot be used."""
 
 
+class MissingCredentialsConfigurationError(ConfigurationError):
+    """The selected authentication mode has no corresponding secret."""
+
+
 @dataclass(frozen=True, slots=True)
 class NightscoutSettings:
     base_url: str = ""
@@ -182,11 +186,11 @@ def load_settings(config_path: Path, secrets_path: Path) -> ApplicationSettings:
 def _validate_auth(settings: ApplicationSettings) -> None:
     mode = settings.nightscout.auth_mode
     if mode == "token" and not settings.secrets.access_token:
-        raise ConfigurationError(
+        raise MissingCredentialsConfigurationError(
             "nightscout.auth_mode='token', but secrets.toml does not contain access_token."
         )
     if mode == "api_secret" and not settings.secrets.api_secret:
-        raise ConfigurationError(
+        raise MissingCredentialsConfigurationError(
             "nightscout.auth_mode='api_secret', but secrets.toml does not contain api_secret."
         )
 

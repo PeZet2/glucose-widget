@@ -11,6 +11,7 @@ from PySide6.QtWidgets import QApplication
 from glucose_widget.alarm import AlarmManager
 from glucose_widget.config import (
     ConfigurationError,
+    MissingCredentialsConfigurationError,
     default_settings,
     load_settings,
 )
@@ -54,7 +55,10 @@ class GlucoseWidgetController(QObject):
             self._settings = load_settings(paths.config_file, paths.secrets_file)
             initial_config_error: str | None = None
         except ConfigurationError as exc:
-            logger.error("Configuration error: %s", exc)
+            if isinstance(exc, MissingCredentialsConfigurationError):
+                logger.warning("Configuration incomplete: %s", exc)
+            else:
+                logger.error("Configuration error: %s", exc)
             self._settings = default_settings()
             initial_config_error = str(exc)
 
@@ -114,7 +118,10 @@ class GlucoseWidgetController(QObject):
         try:
             settings = load_settings(self._paths.config_file, self._paths.secrets_file)
         except ConfigurationError as exc:
-            logger.error("Failed to reload configuration: %s", exc)
+            if isinstance(exc, MissingCredentialsConfigurationError):
+                logger.warning("Configuration incomplete: %s", exc)
+            else:
+                logger.error("Failed to reload configuration: %s", exc)
             if not self._has_snapshot:
                 self.widget.show_configuration_error(str(exc))
             self.tray.show_warning("Configuration error", str(exc))
