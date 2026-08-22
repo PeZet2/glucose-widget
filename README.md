@@ -13,11 +13,21 @@ The default window size is **172 × 100 px**, approximately matching the red fra
 
 > **Important:** This is a private helper widget, not a medical device. Do not use it as the sole source for treatment decisions or your only alarm. Network, Nightscout, notification-system, or application failures may delay or prevent data from being displayed.
 
-## Windows PowerShell 5.1 compatibility
-
-The `scripts/*.ps1` scripts use ASCII characters only and CRLF line endings, so they also work in standard Windows PowerShell 5.1, which can otherwise misread UTF-8 files without a BOM.
-
 ## Quick start on Windows
+
+Choose one of the following launching methods.
+
+### Download package
+
+You can download the latest release package from the `Release` section of this repository.
+
+The zip archive has to be extracted and the application is ready for use.
+
+### Build from source
+
+You can download this repository and build package from source code using a built-in building script `BUILD_EXE_WINDOWS.bat`. The built application is ready for use.
+
+### Run application
 
 You need either:
 
@@ -41,7 +51,11 @@ You need either:
 
 For diagnostics, run `RUN_DEBUG_WINDOWS.bat`. The log is stored in the directory returned by `platformdirs`, normally under the user's local profile in `GlucoseWidget`.
 
-## Minimal configuration
+## Settings
+
+Settings for running the app.
+
+### Minimal configuration
 
 `config.toml`:
 
@@ -72,7 +86,7 @@ api_secret_is_sha1 = false
 
 The application calculates the lowercase SHA-1 hash required by API v1. If you provide an existing 40-character hash, set `api_secret_is_sha1 = true`.
 
-## Main settings
+### Main settings
 
 ```toml
 [network]
@@ -244,4 +258,3 @@ Or only print the current configuration location:
 ```bash
 python -m glucose_widget --print-config-dir
 ```
-
