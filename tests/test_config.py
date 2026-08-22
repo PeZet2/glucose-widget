@@ -65,6 +65,45 @@ def test_load_settings_and_normalize_token(tmp_path: Path) -> None:
     assert settings.glucose.delta_lookback == 1
     assert settings.widget.width == 172
     assert settings.secrets.access_token == "readable-abc123"
+    assert settings.alarm.low.sound is True
+    assert settings.alarm.high.tray_notification is True
+
+
+def test_alarm_levels_can_be_configured_independently(tmp_path: Path) -> None:
+    config = BASE_CONFIG + """
+
+[alarm.low]
+enabled = true
+sound = true
+tray_notification = false
+
+[alarm.high]
+enabled = false
+sound = false
+tray_notification = true
+"""
+    config_path, secrets_path = _write_files(tmp_path, config=config)
+    settings = load_settings(config_path, secrets_path)
+
+    assert settings.alarm.low.enabled is True
+    assert settings.alarm.low.sound is True
+    assert settings.alarm.low.tray_notification is False
+    assert settings.alarm.high.enabled is False
+    assert settings.alarm.high.sound is False
+    assert settings.alarm.high.tray_notification is True
+
+
+def test_legacy_alarm_channel_options_apply_to_both_levels(tmp_path: Path) -> None:
+    config = BASE_CONFIG.replace("sound = true", "sound = false").replace(
+        "tray_notification = true", "tray_notification = false"
+    )
+    config_path, secrets_path = _write_files(tmp_path, config=config)
+    settings = load_settings(config_path, secrets_path)
+
+    assert settings.alarm.low.sound is False
+    assert settings.alarm.high.sound is False
+    assert settings.alarm.low.tray_notification is False
+    assert settings.alarm.high.tray_notification is False
 
 
 def test_delta_and_opacity_are_clamped(tmp_path: Path) -> None:

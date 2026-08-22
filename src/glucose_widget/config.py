@@ -59,10 +59,21 @@ class WidgetSettings:
 
 
 @dataclass(frozen=True, slots=True)
-class AlarmSettings:
-    enabled: bool = False
+class AlarmLevelSettings:
+    enabled: bool = True
     sound: bool = True
     tray_notification: bool = True
+
+
+@dataclass(frozen=True, slots=True)
+class AlarmSettings:
+    enabled: bool = False
+    # Kept for compatibility with pre-level configuration files. New files
+    # should use alarm.low and alarm.high instead.
+    sound: bool = True
+    tray_notification: bool = True
+    low: AlarmLevelSettings = AlarmLevelSettings()
+    high: AlarmLevelSettings = AlarmLevelSettings()
     repeat_minutes: int = 10
 
 
@@ -96,6 +107,8 @@ def load_settings(config_path: Path, secrets_path: Path) -> ApplicationSettings:
     glucose = _table(config, "glucose")
     widget = _table(config, "widget")
     alarm = _table(config, "alarm")
+    alarm_low = _table(alarm, "low")
+    alarm_high = _table(alarm, "high")
     secret_ns = _table(secrets, "nightscout")
 
     auth_mode = _string(ns, "auth_mode", "auto").lower()
@@ -170,6 +183,32 @@ def load_settings(config_path: Path, secrets_path: Path) -> ApplicationSettings:
             enabled=_boolean(alarm, "enabled", False),
             sound=_boolean(alarm, "sound", True),
             tray_notification=_boolean(alarm, "tray_notification", True),
+            low=AlarmLevelSettings(
+                enabled=_boolean(alarm_low, "enabled", True),
+                sound=_boolean(
+                    alarm_low,
+                    "sound",
+                    _boolean(alarm, "sound", True),
+                ),
+                tray_notification=_boolean(
+                    alarm_low,
+                    "tray_notification",
+                    _boolean(alarm, "tray_notification", True),
+                ),
+            ),
+            high=AlarmLevelSettings(
+                enabled=_boolean(alarm_high, "enabled", True),
+                sound=_boolean(
+                    alarm_high,
+                    "sound",
+                    _boolean(alarm, "sound", True),
+                ),
+                tray_notification=_boolean(
+                    alarm_high,
+                    "tray_notification",
+                    _boolean(alarm, "tray_notification", True),
+                ),
+            ),
             repeat_minutes=_bounded_int(alarm, "repeat_minutes", 10, minimum=0, maximum=1_440),
         ),
         secrets=SecretsSettings(

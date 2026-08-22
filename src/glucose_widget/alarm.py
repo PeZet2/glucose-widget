@@ -44,6 +44,15 @@ class AlarmManager:
             self._last_zone = zone
             return
 
+        level_settings = (
+            self._settings.alarm.low
+            if zone == GlucoseZone.LOW
+            else self._settings.alarm.high
+        )
+        if not level_settings.enabled:
+            self._last_zone = zone
+            return
+
         now = datetime.now().astimezone()
         zone_changed = zone != self._last_zone
         repeat_minutes = self._settings.alarm.repeat_minutes
@@ -69,7 +78,7 @@ class AlarmManager:
             title = "High glucose"
         message = f"{value} {self._settings.glucose.display_unit}"
 
-        if self._settings.alarm.sound:
+        if level_settings.sound:
             QApplication.beep()
-        if self._settings.alarm.tray_notification:
+        if level_settings.tray_notification:
             self._tray.show_warning(title, message)
