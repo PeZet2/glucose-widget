@@ -55,11 +55,21 @@ always_on_top = true
 show_reading_time = true
 
 [alarm]
-# The alarm is a system sound and/or a tray notification.
+# Master switch for LOW/HIGH alarms.
 enabled = false
-sound = true
-tray_notification = true
 
 # 0 = alert only when entering LOW/HIGH or switching LOW<->HIGH.
 # A value > 0 repeats the alert after that many minutes while the state persists.
 repeat_minutes = 10
+
+[alarm.low]
+# LOW can be enabled independently from HIGH.
+enabled = true
+sound = true
+tray_notification = true
+
+[alarm.high]
+# HIGH can be enabled independently from LOW.
+enabled = true
+sound = true
+tray_notification = true

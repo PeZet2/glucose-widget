@@ -97,9 +97,17 @@ show_reading_time = true
 
 [alarm]
 enabled = false
+repeat_minutes = 10
+
+[alarm.low]
+enabled = true
 sound = true
 tray_notification = true
-repeat_minutes = 10
+
+[alarm.high]
+enabled = true
+sound = true
+tray_notification = true
 ```
 
 ### Retry
@@ -126,6 +134,13 @@ The alarm can use:
 
 - the Windows system sound,
 - a tray notification.
+
+LOW and HIGH can be configured independently under `[alarm.low]` and
+`[alarm.high]`. Each level has its own `enabled`, `sound`, and
+`tray_notification` settings. The top-level `[alarm].enabled` setting remains
+the master switch for all alarm levels. Existing configurations that use the
+top-level `sound` and `tray_notification` options continue to apply those
+values to both levels unless overridden in a level section.
 
 The same Nightscout record is not alarmed twice. For subsequent new out-of-range records, the alarm may repeat according to `repeat_minutes`. A value of `0` means alert only when entering LOW/HIGH or switching between LOW and HIGH.
 
