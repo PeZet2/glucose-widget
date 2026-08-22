@@ -1,4 +1,5 @@
-# Glucose Widget
+
+# <img src="assets/glucose_widget_logo.png" alt="logo" width="200" align="middle"/> Glucose Widget 
 
 A small, frameless, always-on-top Windows widget that fetches recent readings from Nightscout and displays:
 
